@@ -9,9 +9,9 @@ CYAN=`tput setaf 6`
 NC=`tput sgr0`
 
 vhost_name="mywebsite.loc";
-cert_file="/home/mkatanski/.ssl/server/server.crt"
-cert_key="/home/mkatanski/.ssl/server/server.key"
-root_path="/home/mkatanski/www"
+cert_file=${HOME}"/.ssl/server/server.crt"
+cert_key=${HOME}"/.ssl/server/server.key"
+root_path=${HOME}"/www"
 enableSSL="true"
 
 echo "";
