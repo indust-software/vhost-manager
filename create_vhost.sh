@@ -1,6 +1,10 @@
 #!/bin/bash
 clear;
 
+# Color variables
+#
+# Terminal color variables
+# ----------------------------------------------------------------------------
 YELLOW=`tput setaf 3`
 GREEN=`tput setaf 2`
 RED=`tput setaf 1`
@@ -8,6 +12,11 @@ BLUE=`tput setaf 4`
 CYAN=`tput setaf 6`
 NC=`tput sgr0`
 
+
+# Default settings
+#
+# Change below variables to modify default script behaviour
+# ----------------------------------------------------------------------------
 vhost_name="mywebsite.loc";
 cert_file=${HOME}"/.ssl/server/server.crt"
 cert_key=${HOME}"/.ssl/server/server.key"
@@ -29,6 +38,11 @@ echo "";
 echo "(c) Indust 2015. All Rights Reserved.";
 echo "${NC}";
 echo "";
+
+
+# ------------------------------------------------------------------------------
+# Remove existing host functionality
+# -----------------------------------------------------------------------------
 
 removeVhost() {
   read -p "${NC}Please enter virtual host name:${NC} " name_answer
@@ -53,6 +67,12 @@ read -p "Generate or remove (G/r)?: " choice
 case "$choice" in
   r|R ) removeVhost;;
 esac
+
+
+# ------------------------------------------------------------------------------
+# Collect new virtual host options
+# ------------------------------------------------------------------------------
+
 
 echo "";
 read -p "${NC}Please enter virtual host name ($vhost_name):${NC} " name_answer
@@ -91,6 +111,11 @@ fi
 
 echo "${GREEN}Your website path is:${CYAN} $root_path${NC}"
 echo "";
+
+# ------------------------------------------------------------------------------
+# Generate virtual host
+# ------------------------------------------------------------------------------
+
 
 echo "Creating new virtual host...";
 echo "";
