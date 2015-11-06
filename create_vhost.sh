@@ -91,20 +91,29 @@ fi
 
 echo "${GREEN}Your website path is:${CYAN} $root_path${NC}"
 echo "";
-echo "";
-echo "";
 
 echo "Creating new virtual host...";
 echo "";
+echo "";
+
 echo "${YELLOW}Creating Nginx configuration file in: ${CYAN}/etc/nginx/sites-available/$vhost_name ${NC}";
 
-if [ "$enableSSL" = "false" ]
-then printf "server {\n\tlisten 80;\n\troot "$root_path";\n\tindex index.php index.html index.htm;\n\tserver_name "$vhost_name";\n\n\tlocation / {\n\t\ttry_files \$uri \$uri/ /index.html;\n\t}\n\n\terror_page 404 /404.html;\n\terror_page 500 502 503 504 /50x.html;\n\n\tlocation = /50x.html {\n\t\troot /usr/share/nginx/www;\n\t}\n\n\tlocation ~ \.php$ {\n\t\ttry_files \$uri =404;\n\t\tfastcgi_pass unix:/var/run/php5-fpm.sock;\n\t\tfastcgi_index index.php;\n\t\tfastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;\n\t\tinclude fastcgi_params;\n\t}\n}" > /etc/nginx/sites-available/$vhost_name
-else printf "server {\n\tlisten 80;\n\troot "$root_path";\n\tindex index.php index.html index.htm;\n\tserver_name "$vhost_name";\n\n\tlocation / {\n\t\ttry_files \$uri \$uri/ /index.html;\n\t}\n\n\terror_page 404 /404.html;\n\terror_page 500 502 503 504 /50x.html;\n\n\tlocation = /50x.html {\n\t\troot /usr/share/nginx/www;\n\t}\n\n\tlocation ~ \.php$ {\n\t\ttry_files \$uri =404;\n\t\tfastcgi_pass unix:/var/run/php5-fpm.sock;\n\t\tfastcgi_index index.php;\n\t\tfastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;\n\t\tinclude fastcgi_params;\n\t}\n}\n\nserver {\n\tlisten 443;\n\troot "$root_path";\n\tindex index.php index.html index.htm;\n\tserver_name "$vhost_name";\n\n\tlocation / {\n\t\ttry_files \$uri \$uri/ /index.html;\n\t}\n\n\terror_page 404 /404.html;\n\terror_page 500 502 503 504 /50x.html;\n\n\tlocation = /50x.html {\n\t\troot /usr/share/nginx/www;\n\t}\n\n\tlocation ~ \.php$ {\n\t\ttry_files \$uri =404;\n\t\tfastcgi_pass unix:/var/run/php5-fpm.sock;\n\t\tfastcgi_index index.php;\n\t\tfastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;\n\t\tinclude fastcgi_params;\n\t}\n\n\tssl on;\n\tssl_certificate "$cert_file";\n\tssl_certificate_key "$cert_key";\n}" > /etc/nginx/sites-available/$vhost_name
+vhost_file=/etc/nginx/sites-available/$vhost_name;
+
+# Copy temlates files and create vhost configuration file
+cat vhost_80.tpl > $vhost_file;
+if [ "$enableSSL" = "true" ]
+  then cat vhost_443.tpl >> $vhost_file;
 fi
 
+# Replace variables in vhost configuration file
+sed -i "s|{{root_path}}|$root_path|g" $vhost_file
+sed -i "s|{{vhost_name}}|$vhost_name|g" $vhost_file
+sed -i "s|{{cert_key}}|$cert_key|g" $vhost_file
+sed -i "s|{{cert_file}}|$cert_file|g" $vhost_file
+
 echo "${YELLOW}Making new virtual host active${NC}";
-ln -s /etc/nginx/sites-available/$vhost_name /etc/nginx/sites-enabled/
+ln -s $vhost_file /etc/nginx/sites-enabled/
 
 echo "${YELLOW}Creating website directory: ${CYAN}$root_path${NC}";
 mkdir $root_path
