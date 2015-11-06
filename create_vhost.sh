@@ -30,7 +30,31 @@ echo "(c) Indust 2015. All Rights Reserved.";
 echo "${NC}";
 echo "";
 
+removeVhost() {
+  read -p "${NC}Please enter virtual host name:${NC} " name_answer
 
+  echo "${GREEN}Removing nginx sites${NC}"
+  rm /etc/nginx/sites-enabled/$name_answer
+  rm /etc/nginx/sites-available/$name_answer
+
+  echo "${GREEN}Removing hosts entry${NC}"
+  sed -i '/'$name_answer'/d' /etc/hosts
+
+  echo "${GREEN}Restarting nginx${NC}"
+  service nginx restart
+
+  echo "${GREEN}All done. Please remove webisite files manualy.${NC}"
+  echo ""
+
+  exit 1;
+}
+
+read -p "Generate or remove (G/r)?: " choice
+case "$choice" in
+  r|R ) removeVhost;;
+esac
+
+echo "";
 read -p "${NC}Please enter virtual host name ($vhost_name):${NC} " name_answer
 
 if [ "$name_answer" != "" ]
