@@ -91,7 +91,20 @@ echo "${GREEN}Your new vhost name is:${CYAN} $vhost_name${NC}"
 echo "";
 
 useSSL() {
-  printf "${GREEN}SSL will be enabled on port 443\nUse certificate from:${CYAN} ${cert_file}${GREEN}\nUse certificate key from:${CYAN} ${cert_key}${NC}\n";
+
+  printf "${GREEN}SSL will be enabled${NC}\n\n";
+
+  read -p "${NC}Please enter certificate file path ($cert_file):${NC} " cert_answer
+  if [ "$cert_answer" != "" ]
+    then cert_file=$cert_answer;
+  fi
+  printf "${GREEN}Use certificate from:${CYAN} ${cert_file}${NC}\n\n";
+
+  read -p "${NC}Please enter certificate key path ($cert_key):${NC} " key_answer
+  if [ "$key_answer" != "" ]
+    then cert_key=$key_answer;
+  fi
+  printf "${GREEN}Use certificate key from:${CYAN} ${cert_key}${NC}\n";
 }
 
 disableSSL() {
