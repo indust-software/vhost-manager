@@ -51,7 +51,7 @@ echo "";
 # -----------------------------------------------------------------------------
 
 removeVhost() {
-  read -p "${NC}Please enter virtual host name:${NC} " name_answer
+  read -p "${NC}Please enter virtual host name :${NC} " name_answer
 
   echo "${GREEN}Removing nginx sites${NC}"
   rm /etc/nginx/sites-enabled/$name_answer
@@ -69,7 +69,7 @@ removeVhost() {
   exit 1;
 }
 
-read -p "Generate or remove (G/r)?: " choice
+read -p "Generate or remove? ${CYAN}(G/r)${NC} : " choice
 case "$choice" in
   r|R ) removeVhost;;
 esac
@@ -81,7 +81,7 @@ esac
 
 
 echo "";
-read -p "${NC}Please enter virtual host name ($vhost_name):${NC} " name_answer
+read -p "${NC}Please enter virtual host name ${CYAN}($vhost_name)${NC} :${NC} " name_answer
 
 if [ "$name_answer" != "" ]
   then vhost_name=$name_answer;
@@ -94,13 +94,13 @@ useSSL() {
 
   printf "${GREEN}SSL will be enabled${NC}\n\n";
 
-  read -p "${NC}Please enter certificate file path ($cert_file):${NC} " cert_answer
+  read -p "${NC}Please enter certificate file path ${CYAN}($cert_file)${NC} :${NC} " cert_answer
   if [ "$cert_answer" != "" ]
     then cert_file=$cert_answer;
   fi
   printf "${GREEN}Use certificate from:${CYAN} ${cert_file}${NC}\n\n";
 
-  read -p "${NC}Please enter certificate key path ($cert_key):${NC} " key_answer
+  read -p "${NC}Please enter certificate key path ${CYAN}($cert_key)${NC} :${NC} " key_answer
   if [ "$key_answer" != "" ]
     then cert_key=$key_answer;
   fi
@@ -112,7 +112,7 @@ disableSSL() {
   echo "${RED}SSL disabled${NC}";
 }
 
-read -p "Do You want to use SSL also (Y/n)?: " choice
+read -p "Do You want to use SSL also? ${CYAN}(Y/n)${NC} : " choice
 case "$choice" in
   y|Y ) useSSL;;
   n|N ) disableSSL;;
@@ -121,7 +121,7 @@ esac
 
 echo "";
 
-read -p "${NC}Enter website root path (${root_path}/${vhost_name}):${NC} " root_answer
+read -p "${NC}Enter website root path ${CYAN}(${root_path}/${vhost_name})${NC} :${NC} " root_answer
 
 if [ "$root_answer" != "" ]
   then root_path=$root_answer;
